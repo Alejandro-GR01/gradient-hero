@@ -1,0 +1,86 @@
+/* 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow: hidden;
+}
+
+#webglCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+}
+
+
+:root {
+    --color-1: #FF6B8B; 
+    --color-2: #36D1DC; 
+    --color-3: #5B86E5;
+    --color-4: #FFE066;
+    --color-5: #9B5DE5; 
+    --color-6: #00BBF9; 
+} 
+*/
+
+
+
+/* RESET BÁSICO */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow: hidden;
+    background-color: #000; /* Fondo negro para que no haya destellos blancos */
+}
+
+#webglCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+}
+
+/* PALETA DE AZULES: Del Rey al Cielo Oscuro */
+:root {
+    --color-1: #002366; /* Azul Rey muy profundo (Cresta superior) */
+    --color-2: #003399; /* Azul Rey estándar */
+    --color-3: #0047AB; /* Azul Cobalto */
+    --color-4: #0056D2; /* Azul Intenso */
+    --color-5: #0070FF; /* Azul Brillante */
+    --color-6: #0099CC; /* Azul Cielo Oscuro (Fondo/Base) */
+}
+
+.hidden {
+    display: none;
+}
+
+#canvas{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.hero-section{
+    position: relative;
+    background-image: url('./hero-img.png') ;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    width: 100svw;
+    height: 100svh;
+}
