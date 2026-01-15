@@ -1,5 +1,6 @@
 window.addEventListener("load", function () {
-  const canvas = document.getElementById("canvas");
+  const canvas = document.createElement("canvas");
+  canvas.id = "canvas";
   const gl = canvas.getContext("webgl");
 
   // ================= CREAR CANVAS 2D PARA EL GRADIENTE =================
@@ -18,8 +19,17 @@ window.addEventListener("load", function () {
     "hsl(225deg 85% 32%)", // #0C2D94
     "hsl(215deg 100% 50%)", // #0162FF
     "hsl(214deg 100% 62%)", // #3C87FF
-    "hsl(199deg 89% 57%)" , // #30B7F4
+    "hsl(199deg 89% 57%)", // #30B7F4
   ];
+
+  if (!gl || !ctx) {
+    console.log("WebGL no soportado");
+
+    return;
+  }
+  //si funciona  webgl agregar los canvas
+  const heroSection = this.document.querySelector(".hero-section");
+  if (heroSection) heroSection.appendChild(canvas);
 
   // Creando linear gradient en gradientCanvas
   const linearGradient = ctx.createLinearGradient(
@@ -65,14 +75,6 @@ window.addEventListener("load", function () {
 
   gl.bindTexture(gl.TEXTURE_2D, null);
 
-  if (!gl || !ctx) {
-    alert("WebGL no soportado");
-    document.body.removeChild(canvas);
-    document.body.removeChild(gradientCanvas);
-    console.log('eliminar canvas y mostrar imagen')
-    return;
-  }
-
   function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -104,9 +106,11 @@ window.addEventListener("load", function () {
     #define PI 3.141592653589793
     #define BLUR_AMOUNT 155.0
 
-    const float F = 0.23;
+    const float F = 0.08;
+    // const float F = 0.23;
     const float L = 0.0008;
-    const float S = 0.13;
+    const float S = 0.09;
+    // const float S = 0.13;
     const float A = 2.0;
 
     // ================= FUNCIONES AUXILIARES PARA SIMPLEX NOISE =================
