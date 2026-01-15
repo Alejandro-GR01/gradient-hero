@@ -1,6 +1,7 @@
 window.addEventListener("load", function () {
   const canvas = document.createElement("canvas");
   canvas.id = "canvas";
+  
   const gl = canvas.getContext("webgl");
 
   // ================= CREAR CANVAS 2D PARA EL GRADIENTE =================
