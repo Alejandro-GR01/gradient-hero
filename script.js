@@ -72,13 +72,15 @@ window.addEventListener("load", function () {
   gl.bindTexture(gl.TEXTURE_2D, null);
 
   // ================= CONFIGURACIÓN DE TAMAÑO =================
-  function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+  const FIXED_WIDTH = 1920;
+  const FIXED_HEIGHT = 1080;
+  
+    canvas.width = FIXED_WIDTH;
+    canvas.height = FIXED_HEIGHT;
     gl.viewport(0, 0, canvas.width, canvas.height);
-  }
-  window.addEventListener("resize", resize);
-  resize();
+ 
+ 
+
 
   // ================= SHADERS =================
   const vertexShaderSource = /*glsl*/`
@@ -100,10 +102,10 @@ window.addEventListener("load", function () {
     #define PI 3.141592653589793
     #define BLUR_AMOUNT 155.0
 
-    const float F = 0.08;
-    const float L = 0.0008;
+    const float F = 0.27;
+    const float L = 0.0009;
     const float S = 0.09;
-    const float A = 2.0;
+    const float A = 1.3;
 
     // ================= FUNCIONES SIMPLEX NOISE =================
     vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
@@ -244,9 +246,9 @@ window.addEventListener("load", function () {
       float wave3_alpha = wave_alpha(WAVE3_Y, WAVE3_HEIGHT, x, y);
 
       float bg_lightness = background_noise(x, y, 0.0);
-      float w1_lightness = background_noise(x, y, 200.0);
-      float w2_lightness = background_noise(x, y, 400.0);
-      float w3_lightness = background_noise(x, y, 600.0);
+      float w1_lightness = background_noise(x, y, 100.0);
+      float w2_lightness = background_noise(x, y, 200.0);
+      float w3_lightness = background_noise(x, y, 300.0);
 
       float lightness = bg_lightness;
       lightness = mix(lightness, w1_lightness, wave1_alpha);
@@ -308,7 +310,7 @@ window.addEventListener("load", function () {
   const FRAME_TIME = 1000 / FPS;
   let lastTime = 0;
 
-  function render(now) {
+  function render(now) {  
     if (now - lastTime < FRAME_TIME) {
       requestAnimationFrame(render);
       return;
