@@ -15,10 +15,10 @@ window.addEventListener("load", function () {
   const maxVertexTextureUnits = gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
   const maxFragmentUniformVectors = gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS);
 
-  const MIN_TEXTURE_SIZE = 2048;
-  const MIN_RENDERBUFFER = 2048;
-  const MIN_VERTEX_TEXTURE_UNITS = 4;
-  const MIN_FRAGMENT_UNIFORMS = 32;
+  const MIN_TEXTURE_SIZE = 2048;       // mínimo para tu gradiente y canvas
+  const MIN_RENDERBUFFER = 2048;       // mínimo para buffers de WebGL
+  const MIN_VERTEX_TEXTURE_UNITS = 4;  // mínimo de texturas en vertex shader
+  const MIN_FRAGMENT_UNIFORMS = 32;    // mínimo de uniform vectors
 
   if (
     maxTextureSize < MIN_TEXTURE_SIZE ||
@@ -27,7 +27,7 @@ window.addEventListener("load", function () {
     maxFragmentUniformVectors < MIN_FRAGMENT_UNIFORMS
   ) {
     console.log("No es suficiente la gráfica o los requerimientos son bajos.");
-    return;
+    return; // Salimos para no renderizar
   }
 
   // ================= CREAR CANVAS 2D PARA EL GRADIENTE =================
@@ -71,13 +71,17 @@ window.addEventListener("load", function () {
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, gradientCanvas);
   gl.bindTexture(gl.TEXTURE_2D, null);
 
-  // ================= TAMAÑO FIJO PARA DESKTOP =================
-  canvas.width = 1920;   // ancho fijo
-  canvas.height = 1080;  // alto fijo
-  gl.viewport(0, 0, canvas.width, canvas.height);
+  // ================= CONFIGURACIÓN DE TAMAÑO =================
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    gl.viewport(0, 0, canvas.width, canvas.height);
+  }
+  window.addEventListener("resize", resize);
+  resize();
 
   // ================= SHADERS =================
-  const vertexShaderSource =  /*glsl*/`
+  const vertexShaderSource = /*glsl*/`
     attribute vec2 position;
     varying vec2 v_uv;
     void main() {
@@ -86,7 +90,7 @@ window.addEventListener("load", function () {
     }
   `;
 
-  const fragmentShaderSource = /*glsl*/`
+  const fragmentShaderSource = /*glsl */ `
     precision highp float;
     uniform float u_time;
     uniform float u_width;
