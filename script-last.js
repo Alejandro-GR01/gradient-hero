@@ -89,7 +89,7 @@ window.addEventListener("load", function () {
     }
   `;
 
-  const fragmentShaderSource = `
+  const fragmentShaderSource =/*glsl*/  `
     precision highp float;
 
     uniform float u_time;
