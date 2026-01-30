@@ -316,34 +316,40 @@ window.addEventListener("load", function () {
   let frameCount = 0;
   let lastFPSCheck = performance.now();
 
-  // ================= updateCanvasSize (dibujar inmediato) =================
+// ================= updateCanvasSize (VERSION CORREGIDA) =================
   function updateCanvasSize() {
     const rect = heroSection.getBoundingClientRect();
+    
+    // 1. Evitar anchos o altos menores a 1px para que WebGL no colapse
+    const newWidth = Math.max(1, Math.floor(rect.width));
+    const newHeight = Math.max(1, Math.floor(rect.height));
 
-    // solo si cambió tamaño (evita trabajo innecesario)
-    if (canvas.width === rect.width && canvas.height === rect.height) return;
+    // Solo si cambió tamaño real (usando enteros para evitar flotantes)
+    if (canvas.width === newWidth && canvas.height === newHeight) return;
 
-    canvas.width = rect.width;
-    canvas.height = rect.height;
+    canvas.width = newWidth;
+    canvas.height = newHeight;
+    
+    // 2. Asegurar que el Viewport se actualice siempre
     gl.viewport(0, 0, canvas.width, canvas.height);
 
-    // si cambió el ancho del gradiente, recomponer y subir la textura
-    const newGradW = Math.min(512, window.innerWidth);
-    if (newGradW !== gradientWidth) {
+    // 3. Re-subir la textura del gradiente solo si es necesario
+    const newGradW = Math.min(512, Math.floor(window.innerWidth));
+    if (newGradW !== gradientWidth && newGradW > 0) {
       gradientWidth = newGradW;
       drawGradient(gradientWidth);
       gl.bindTexture(gl.TEXTURE_2D, gradientTexture);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, gradientCanvas);
-      gl.bindTexture(gl.TEXTURE_2D, null);
     }
 
-    // dibujar un frame inmediato para evitar parpadeo
-    gl.uniform1f(timeUniformLocation, time);
+    // 4. Actualizar Uniforms inmediatamente
+    gl.useProgram(program); // Asegurar que el programa está activo
     gl.uniform1f(widthUniformLocation, canvas.width);
     gl.uniform1f(heightUniformLocation, canvas.height);
+    
+    // Dibujar frame de seguridad
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-
-    // opcional: evitar que el render loop piense que acaba de dibujar hace mucho
+    
     lastTime = performance.now();
   }
 
